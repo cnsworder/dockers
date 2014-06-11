@@ -3,7 +3,7 @@ FROM centos
 MAINTAINER cnsworder <cnsworder@gmail.com>
 
 EXPOSE 22
-#RUN yum install gcc -y
+RUN yum install -y openssh-server
 
 #RUN service sshd enable
 RUN mkdir /workspace
@@ -15,8 +15,8 @@ ADD vscd /workspace
 #USER cnsworder
 WORKDIR /workspace
 
-#ENTRYPOINT ["/usr/bin"]
+ENTRYPOINT ["/usr/sbin/sshd"]
 
-#CMD ["-l"]
+CMD ["-D"]
 
 
