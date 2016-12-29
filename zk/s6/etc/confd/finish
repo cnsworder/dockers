@@ -1,0 +1,8 @@
+#!/bin/bash
+set pid =`ps -ef|grep "confd -interval"|grep -v s6-supervise|grep -v grep|awk '{printf $2}'`
+echo "pidNum"
+echo $pid
+if [ "$pid" != "" ]; then
+  echo "kill pid"
+  kill $pid
+fi

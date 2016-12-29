@@ -1,0 +1,5 @@
+[template]
+keys = ["/service" ]
+src = "myid.tmpl"
+dest = "/data/myid"
+reload_cmd = "/zookeeper-3.4.9/bin/zkServer.sh restart"

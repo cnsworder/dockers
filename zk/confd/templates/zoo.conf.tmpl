@@ -1,0 +1,15 @@
+clientPort=2181
+dataDir=/data
+dataLogDir=/datalog
+tickTime=2000
+initLimit=5
+syncLimit=2
+{{range (gets "/service/vs_zk-2888/*")}}
+    {{$base := (base .Key)}}
+    {{$base_list := (split $base ":")}}
+    {{$port := (index $base_list 2)}}
+    {{$names := (index $base_list 1)}}
+    {{$num_list := (split $names "_")}}
+    {{$num := (index $num_list 2)}}
+server.{{$num}}={{.Value}}:3888
+{{end}}

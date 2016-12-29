@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+    zk:
+        image: vs_zk
+        ports:
+           - "2181"

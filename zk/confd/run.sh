@@ -1,0 +1,3 @@
+#!/bin/bash
+echo s6-svscan started...
+s6-svscan  /etc/s6/ 

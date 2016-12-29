@@ -1,0 +1,92 @@
+user  nginx;
+worker_processes  1;
+
+
+error_log  /var/log/nginx/error.log warn;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    upstream backend {
+        {{range getvs "/service/vs_tomcat/*"}}
+            server {{.}};
+        {{end}}
+    }
+
+    upstream backend1 {
+        {{range getvs "/service/vs_tomcat_8280/*"}}
+            server {{.}};
+        {{end}} 
+    }
+    
+    upstream backend2 {
+        {{range getvs "/service/vs_tomcat_8281/*"}}
+            server {{.}};
+        {{end}}
+    }
+
+
+    server {
+        listen 80;
+        server_name vs_tc;
+
+        location / {
+            proxy_pass http://backend;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+            add_header  X-Handler  $upstream_addr;
+        }
+    }
+
+    server {
+       listen  8280;
+       server_name vs_tc1;
+       location / {
+            proxy_pass http://backend1;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+            add_header  X-Handler  $upstream_addr;
+        }
+    } 
+    
+    server {
+       listen  8281;
+       server_name vs_tc2;
+       location / {
+            proxy_pass http://backend2;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+            add_header  X-Handler  $upstream_addr;
+        }
+    }
+
+}

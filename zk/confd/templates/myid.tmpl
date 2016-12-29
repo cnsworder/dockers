@@ -1,0 +1,10 @@
+{{$ip := (getenv "IP")}}
+{{range (gets "/service/vs_zk-2888/*")}}
+    {{$base := (base .Key)}}
+    {{$base_list := (split $base ":")}}
+    {{$lip_list := (split .Value ":")}}
+    {{$lip := (index $lip_list 0)}}
+    {{if (eq $lip $ip)}}
+{{index $base_list 2}}
+    {{end}}
+{{end}}

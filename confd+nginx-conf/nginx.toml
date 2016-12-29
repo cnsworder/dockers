@@ -1,0 +1,5 @@
+[template]
+keys = ["/service" ]
+src = "nginx.conf.tmpl"
+dest = "/etc/nginx/nginx.conf"
+reload_cmd = "/usr/sbin/nginx -s reload"
