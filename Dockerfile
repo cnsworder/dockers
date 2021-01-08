@@ -1,4 +1,4 @@
-FROM centos
+FROM debian
 
 MAINTAINER cnsworder <cnsworder@gmail.com>
 
