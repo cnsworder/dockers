@@ -1,0 +1,19 @@
+# author cnsworder <cnsworder@gmail.com>
+# docker 多阶段构建
+
+# 编译前端项目
+FROM vuejs/ci as builder
+
+WORKDIR /opt/cibuilder/
+COPY ./* ./
+
+RUN npm install
+RUN npm run build
+
+# 构建发布镜像
+FROM nginx
+
+WORKDIR /opt/front_ui/
+COPY --from=builder /opt/front_ui/dist ./portal
+COPY ./deploy/nginx.conf /etc/nginx/nginx.conf
+CMD []
