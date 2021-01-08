@@ -3,7 +3,7 @@ FROM debian
 MAINTAINER cnsworder <cnsworder@gmail.com>
 
 EXPOSE 22
-RUN yum install -y openssh-server
+RUN apt install -y openssh-server
 
 #RUN service sshd enable
 RUN mkdir /workspace
